@@ -1,9 +1,10 @@
 from instabot import Bot
-from config import USERNAME, PASSWORD
+from config import INSTA_TAG, USERNAME, PASSWORD
 import os
+from PIL import Image
 
 def upload():
-    os.system("rmdir /S /Q config")
+    os.system('rmdir /S /Q config')
 
     bot = Bot()
     bot.login(
@@ -11,9 +12,14 @@ def upload():
         password=PASSWORD
     )
 
-    dir = "img/"
+    dir = 'img/'
 
     for img in os.listdir(dir):
-        bot.upload_photo(dir + img, caption="Test2222")
-        os.system("del img\\" + img)
+        im = Image.open(dir + img)
+        width, height = im.size
+        if .85 < width / height > 1.15: #not quadratic or similiar
+            continue
+
+        bot.upload_photo(dir + img, caption=INSTA_TAG)
+        break
     
